@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: discourse
+      POSTGRES_USER: discourse
+      POSTGRES_PASSWORD: discourse_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U discourse -d discourse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  discourse:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      RAILS_ENV: production
+      DISCOURSE_DB_HOST: postgres
+      DISCOURSE_DB_PORT: 5432
+      DISCOURSE_DB_NAME: discourse
+      DISCOURSE_DB_USERNAME: discourse
+      DISCOURSE_DB_PASSWORD: discourse_password
+      DISCOURSE_REDIS_HOST: redis
+      DISCOURSE_REDIS_PORT: 6379
+      DISCOURSE_HOSTNAME: localhost
+      DISCOURSE_PORT: 3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - discourse_uploads:/app/public/uploads
+      - discourse_backups:/app/public/backups
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  discourse_uploads:
+  discourse_backups: 
