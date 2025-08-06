@@ -1,0 +1,4 @@
+plugins:
+  report_url_enabled:
+    default: true
+    client: true 

@@ -1,0 +1,10 @@
+plugins:
+  report_api_enabled:
+    default: true
+    client_setting: false
+  report_api_key:
+    default: "your-secret-api-key"
+    client_setting: false
+  report_default_category:
+    default: "报告"
+    client_setting: false 

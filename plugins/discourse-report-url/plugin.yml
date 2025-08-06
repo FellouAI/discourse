@@ -1,0 +1,5 @@
+name: discourse-report-url
+version: 0.1
+about: Adds report_url field to topics and total likes count to topic lists
+authors: Your Name
+url: https://github.com/your-repo/discourse-report-url 
