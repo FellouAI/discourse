@@ -156,7 +156,6 @@ class ReportApiController < ApplicationController
       existing_user = UserEmail.find_by(email: user_info[:email])&.user
       if existing_user
         # 如果邮箱已被使用，返回现有用户
-        puts ">>>>>>>>>>>邮箱已存在，使用现有用户: #{existing_user.username}"
         return existing_user
       else
         user.email = user_info[:email]
@@ -166,12 +165,9 @@ class ReportApiController < ApplicationController
       user.email = "temp_#{SecureRandom.hex(8)}@example.com"
     end
     
-    # 添加调试信息
-    puts ">>>>>>>>>>>创建用户: username=#{username}, name=#{user.name}, email=#{user.email}"
-    puts ">>>>>>>>>>>用户对象: #{user.inspect}"
+ 
     
     if user.save
-      puts ">>>>>>>>>>>用户创建成功: id=#{user.id}"
       
       # 如果使用了临时邮箱，创建真实的邮箱关联
       if user_info[:email].present?
@@ -245,6 +241,12 @@ class ReportApiController < ApplicationController
       last_post_user_id: -1
     )
     
+    # 如果有report_url，保存到topic的custom_fields中
+    if params[:report_url].present?
+      topic.custom_fields['report_url'] = params[:report_url]
+      topic.save_custom_fields
+    end
+    
     # 创建首贴
     post_content = generate_post_content
     post = Post.create!(
@@ -262,10 +264,6 @@ class ReportApiController < ApplicationController
   def generate_post_content
     content = []
     content << params[:description]
-    
-    if params[:report_url].present?
-      content << "\n\n**报告链接：** #{params[:report_url]}"
-    end
     
     if params[:content_type].present?
       content << "\n\n**内容类型：** #{params[:content_type]}"
