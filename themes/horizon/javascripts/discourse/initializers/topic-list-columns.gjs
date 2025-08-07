@@ -106,9 +106,14 @@ export default {
           event.preventDefault();
           event.stopPropagation();
 
-          const topicLink = event.target
-            .closest("tr")
-            .querySelector("a.raw-topic-link");
+          const wrapper = event.target.closest(".topic-list-item-wrapper");
+          const topicLink = wrapper.querySelector("a.raw-topic-link");
+
+          // Debug: log if we can't find the link
+          if (!topicLink) {
+            console.warn("Could not find a.raw-topic-link in wrapper:", wrapper);
+            return next();
+          }
 
           // Redespatch the click on the topic link, so that all key-handing is sorted
           topicLink.dispatchEvent(

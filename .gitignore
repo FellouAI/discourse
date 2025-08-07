@@ -79,8 +79,6 @@
 !/plugins/discourse-topic-voting
 !/plugins/discourse-templates
 !/plugins/discourse-ai
-!/plugins/discourse-report-api
-!/Plugins/discourse-report-url
 /plugins/*/auto_generated
 
 /spec/fixtures/plugins/my_plugin/auto_generated
@@ -126,3 +124,5 @@ openapi/*
 .direnv
 
 .idea
+
+.cursor/*

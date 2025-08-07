@@ -135,3 +135,17 @@ For over a decade, our [amazing community](https://meta.discourse.org/) has help
 
 We’re deeply grateful for every feature request, bug report, and discussion that has driven Discourse forward. Thank you for being a part of this journey—we couldn’t have done it without you!
 
+# 创建新用户
+user = User.new(
+  username: "monalee2",
+  email: "limeng_lm5@yeah.net",
+  password: "123limengLM20250806",
+  active: true,
+  approved: true
+)
+user.skip_email_validation = true
+user.save!(validate: false)  # 跳过所有 ActiveRecord 验证
+
+
+email = "limeng_lm3@yeah.net"
+username = "monalee"

@@ -1,30 +1,23 @@
 version: '3.8'
 
 services:
-  discourse:
-    build:
-      context: .
-      dockerfile: Dockerfile.app
+  postgres:
+    image: pgvector/pgvector:0.8.0-pg16 # 使用内置了 pgvector 的镜像
+    container_name: pg-container
     environment:
-      RAILS_ENV: production
-      DISCOURSE_DB_HOST: postgres
-      DISCOURSE_DB_PORT: 5432
-      DISCOURSE_DB_NAME: discourse
-      DISCOURSE_DB_USERNAME: discourse
-      DISCOURSE_DB_PASSWORD: discourse_password
-      DISCOURSE_REDIS_HOST: redis
-      DISCOURSE_REDIS_PORT: 6379
-      DISCOURSE_HOSTNAME: localhost
-      DISCOURSE_PORT: 3000
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test
     ports:
-      - "3000:3000"
+      - "5432:5432"
+    networks:
+      - dify
     volumes:
-      - discourse_uploads:/app/public/uploads
-      - discourse_backups:/app/public/backups
-    restart: unless-stopped
+      - pg-data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
-  redis_data:
-  discourse_uploads:
-  discourse_backups: 
+  pg-data:
+
+networks:
+  dify:
+    external: true

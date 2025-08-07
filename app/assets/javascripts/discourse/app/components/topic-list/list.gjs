@@ -181,18 +181,16 @@ export default class TopicList extends Component {
   }
 
   <template>
-    {{! template-lint-disable table-groups }}
-    <table
+    <div
       class={{concatClass
-        "topic-list"
+        "topic-list-grid"
         (if this.bulkSelectEnabled "sticky-header bulk-select-enabled")
         this.additionalClasses
       }}
       aria-labelledby="topic-list-heading"
       ...attributes
     >
-      <caption class="sr-only">{{i18n "sr_topic_list_caption"}}</caption>
-      <thead class="topic-list-header">
+      <div class="topic-list-header">
         <Header
           @columns={{this.columns}}
           @canBulkSelect={{@canBulkSelect}}
@@ -213,7 +211,7 @@ export default class TopicList extends Component {
           @newTopicsCount={{@newTopicsCount}}
           @changeNewListSubset={{@changeNewListSubset}}
         />
-      </thead>
+      </div>
 
       <PluginOutlet
         @name="before-topic-list-body"
@@ -227,41 +225,41 @@ export default class TopicList extends Component {
         }}
       />
 
-      <tbody class="topic-list-body">
+      <div class="topic-list-body">
         {{#each @topics as |topic index|}}
-          <Item
-            @columns={{this.columns}}
-            @topic={{topic}}
-            @bulkSelectHelper={{@bulkSelectHelper}}
-            @bulkSelectEnabled={{this.bulkSelectEnabled}}
-            @showTopicPostBadges={{this.showTopicPostBadges}}
-            @hideCategory={{@hideCategory}}
-            @expandGloballyPinned={{@expandGloballyPinned}}
-            @expandAllPinned={{@expandAllPinned}}
-            @lastVisitedTopic={{this.lastVisitedTopic}}
-            @selected={{this.selected}}
-            @tagsForUser={{@tagsForUser}}
-            @focusLastVisitedTopic={{@focusLastVisitedTopic}}
-            @index={{index}}
-          />
+          <div class="topic-list-item-wrapper">
+            <Item
+              @columns={{this.columns}}
+              @topic={{topic}}
+              @bulkSelectHelper={{@bulkSelectHelper}}
+              @bulkSelectEnabled={{this.bulkSelectEnabled}}
+              @showTopicPostBadges={{this.showTopicPostBadges}}
+              @hideCategory={{@hideCategory}}
+              @expandGloballyPinned={{@expandGloballyPinned}}
+              @expandAllPinned={{@expandAllPinned}}
+              @lastVisitedTopic={{this.lastVisitedTopic}}
+              @selected={{this.selected}}
+              @tagsForUser={{@tagsForUser}}
+              @focusLastVisitedTopic={{@focusLastVisitedTopic}}
+              @index={{index}}
+            />
 
-          {{#if (eq topic this.lastVisitedTopic)}}
-            <tr class="topic-list-item-separator">
-              <td class="topic-list-data" colspan="6">
+            {{#if (eq topic this.lastVisitedTopic)}}
+              <div class="topic-list-item-separator" style="display:none">
                 <span>
                   {{i18n "topics.new_messages_marker"}}
                 </span>
-              </td>
-            </tr>
-          {{/if}}
+              </div>
+            {{/if}}
 
-          <PluginOutlet
-            @name="after-topic-list-item"
-            @outletArgs={{lazyHash topic=topic index=index}}
-            @connectorTagName="tr"
-          />
+            <PluginOutlet
+              @name="after-topic-list-item"
+              @outletArgs={{lazyHash topic=topic index=index}}
+              @connectorTagName="div"
+            />
+          </div>
         {{/each}}
-      </tbody>
+      </div>
 
       <PluginOutlet
         @name="after-topic-list-body"
@@ -274,6 +272,6 @@ export default class TopicList extends Component {
           hideCategory=@hideCategory
         }}
       />
-    </table>
+    </div>
   </template>
 }
