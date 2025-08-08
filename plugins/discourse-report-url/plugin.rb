@@ -79,6 +79,29 @@ after_initialize do
     end
   end
 
+  # Add topic content to topic list item serializer
+  add_to_serializer(:topic_list_item, :topic_content) do
+    first_post = object.first_post
+    first_post&.raw || ""
+  end
+
+  # Add topic content to topic view serializer
+  add_to_serializer(:topic_view, :topic_content) do
+    first_post = object.topic.first_post
+    first_post&.raw || ""
+  end
+
+  # Add topic content to user action serializer
+  add_to_serializer(:user_action, :topic_content) do
+    if object.respond_to?(:topic_id) && object.topic_id
+      topic = Topic.find_by(id: object.topic_id)
+      first_post = topic&.first_post
+      first_post&.raw || ""
+    else
+      ""
+    end
+  end
+
   # Preload custom fields for better performance
   add_preloaded_topic_list_custom_field(DiscourseReportUrl::REPORT_URL_FIELD)
 end
